@@ -1,9 +1,6 @@
 const faker = require('faker');
-const Artist = require('./index');
 
-// 100 artists - 3 albums - 10 songs
-
-for (var i = 1; i <= 100; i++) {
+for (var i = 1; i <= 10000; i++) {
   let objA = {
     id: i,
     name: faker.lorem.word(),
@@ -36,11 +33,13 @@ for (var i = 1; i <= 100; i++) {
     objA.albums.push(objB);
   }
 
-  Artist.create(objA, function(err, data) {
-    if (err) {
-      console.log('error');
-    } else {
-      console.log('success');
-    }
-  });
+  // Artist.create(objA, function(err, data) {
+  //   if (err) {
+  //     console.log('error');
+  //   } else {
+  //     console.log('success');
+  //   }
+  // });
+
+  console.log(objA);
 }
