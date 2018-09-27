@@ -11,18 +11,19 @@
 
 ## GET
 
+All Artists
 ```
 /artists
 ```
-
+Artist
 ```
 /artist/:id
 ```
-
+Album
 ```
 /album/:id
 ```
-
+Song
 ```
 /song/:id
 ```
@@ -33,20 +34,19 @@
 /artist
 ```
 ## PUT
-
+Update Artist
 ```
 /artist/:id
 ```
 ## Delete
-
-```
+Artist```
 /artist/:id
 ```
-
+Album
 ```
 /album/:id
 ```
-
+Song
 ```
 /song/:id
 ```
