@@ -21,13 +21,17 @@ app.use(express.static(path.join(__dirname, '../public/')));
 //     .catch(err => console.log(err));
 // });
 
+app.get('/artist', (req, res) => {
+  requestHandler.getAllArtists();
+});
+
 // GET
 app.get('/artist/:id', function(req, res) {
-  // requestHandler.getArtist();
-  // requestHandler.getAlbum();
-  var album = requestHandler.getAlbum();
-  album.then(album => {
-    res.send(album[0].dataValues);
+  var artistId = req.params.id;
+  var artist = requestHandler.getArtist(artistId);
+
+  artist.then(artist => {
+    res.send(artist[0].dataValues);
   });
 
   // let artistID = parseInt(req.params.id, 10);
@@ -38,33 +42,51 @@ app.get('/artist/:id', function(req, res) {
 });
 
 app.get('/album/:id', function(req, res) {
-  res.send('Received album get request');
+  var albumId = req.params.id;
+  var album = requestHandler.getAlbum(albumId);
+
+  album.then(album => {
+    res.send(album[0].dataValues);
+  });
 });
 
 app.get('/song/:id', function(req, res) {
-  res.send('Received song get request');
+  var songId = req.params.id;
+  var song = requestHandler.getSong(songId);
+
+  song.then(song => {
+    res.send(song[0].dataValues);
+  });
 });
 
 // POST
+// app.post('/artist', function(req, res) {
+//   let update = {};
+//   var objProp = `albums.${req.body.albumID}.songs.${req.body.songID}.library`;
+//   update[objProp] = !!parseInt(req.body.added, 10);
+
+//   Artists.findOneAndUpdate({ id: req.body.artistID }, { $set: update })
+//     .then(() =>
+//       res.json({ message: 'success', added: !!parseInt(req.body.added, 10) })
+//     )
+//     .catch(() => res.status(400).json({ message: 'bad request' }));
+// });
+
 app.post('/artist', function(req, res) {
-  let update = {};
-  var objProp = `albums.${req.body.albumID}.songs.${req.body.songID}.library`;
-  update[objProp] = !!parseInt(req.body.added, 10);
+  var artist = req.body;
 
-  Artists.findOneAndUpdate({ id: req.body.artistID }, { $set: update })
-    .then(() =>
-      res.json({ message: 'success', added: !!parseInt(req.body.added, 10) })
-    )
-    .catch(() => res.status(400).json({ message: 'bad request' }));
-});
-
-app.post('/artist/:id', function(req, res) {
-  res.send('artist post request');
-  console.log('POST REQUEST RECEIVED');
+  requestHandler.createArtist(artist);
+  res.send('created');
 });
 
 // UPDATE
 app.put('/artist/:id', function(req, res) {
+  var artistId = req.params.id;
+  var artist = req.body;
+
+  console.log('Artist', artist);
+  requestHandler.updateArtist(artistId, artist);
+
   res.send('artist put request');
   console.log('PUT REQUEST RECEIVED');
 });
@@ -81,6 +103,9 @@ app.put('/song/:id', function(req, res) {
 
 // DELETE
 app.delete('/artist/:id', function(req, res) {
+  var artistId = req.params.id;
+  requestHandler.deleteArtist(artistId);
+
   res.send('artist delete request');
   console.log('DELETE REQUEST RECEIVED');
 });

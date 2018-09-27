@@ -1,34 +1,66 @@
 const db = require('../db');
 
 // Controller Methods
-var getArtist = () => {
+
+// GET REQUEST
+var getArtist = artistId => {
   // Query the database and get all the artists
-  db.Artist.findAll({
+  return db.Artist.findAll({
     where: {
-      id: 50
+      id: artistId
     }
-  }).then(artists => {
-    console.log('One Artist', artists);
   });
 };
 
-var getSong = () => {
+var getSong = songId => {
   // Query the database and get all the artists
-  console.log('GET SONG METHOD', db.Song);
-  db.Song.findAll({
+  return db.Song.findAll({
     where: {
-      id: 20
+      id: songId
     }
-  }).then(song => {
-    console.log('All song', song);
   });
 };
 
-var getAlbum = () => {
+var getAlbum = albumId => {
   // Query the database and get all the artists
   return db.Album.findAll({
     where: {
-      id: 1
+      id: albumId
+    }
+  });
+};
+
+// POST REQUEST
+var createArtist = artist => {
+  console.log('ARTIST IN REQUEST HANDLER', artist);
+  // Post request
+  db.Artist.create({
+    name: artist.name
+  });
+};
+
+// PUT REQUEST
+var updateArtist = (artistId, artist) => {
+  var artistName = artist.name;
+  console.log('NEW ARTIST NAME', artistName);
+
+  db.Artist.update(
+    {
+      name: artistName
+    },
+    {
+      where: {
+        id: artistId
+      }
+    }
+  );
+};
+
+// DELETE REQUEST
+var deleteArtist = artistId => {
+  db.Artist.destroy({
+    where: {
+      id: artistId
     }
   });
 };
@@ -36,3 +68,6 @@ var getAlbum = () => {
 module.exports.getArtist = getArtist;
 module.exports.getSong = getSong;
 module.exports.getAlbum = getAlbum;
+module.exports.createArtist = createArtist;
+module.exports.updateArtist = updateArtist;
+module.exports.deleteArtist = deleteArtist;
