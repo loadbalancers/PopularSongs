@@ -1,32 +1,55 @@
-# Project Name
+# SkyCloud
 
-> Project description
-
-## Related Projects
-
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
-  - https://github.com/teamName/repo
+> Music streaming app
 
 ## Table of Contents
 
-1. [Usage](#Usage)
-1. [Requirements](#requirements)
-1. [Development](#development)
+1. [GET](#get)
+2. [POST](#post)
+3. [PUT](#put)
+4. [DELETE](#development)
 
-## Usage
+## GET
 
-> Some usage instructions
+```
+/artists
+```
 
-## Requirements
+```
+/artist/:id
+```
 
-An `nvmrc` file is included if using [nvm](https://github.com/creationix/nvm).
+```
+/album/:id
+```
 
-- Node 6.13.0
-- etc
+```
+/song/:id
+```
 
-## Development
+## POST
+
+```
+/artist
+```
+## PUT
+
+```
+/artist/:id
+```
+## Delete
+
+```
+/artist/:id
+```
+
+```
+/album/:id
+```
+
+```
+/song/:id
+```
 
 ### Installing Dependencies
 
