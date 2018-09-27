@@ -65,9 +65,27 @@ var deleteArtist = artistId => {
   });
 };
 
+var deleteSong = songId => {
+  db.Song.destroy({
+    where: {
+      id: songId
+    }
+  });
+};
+
+var deleteAlbum = albumId => {
+  db.Album.destroy({
+    where: {
+      id: albumId
+    }
+  });
+};
+
 module.exports.getArtist = getArtist;
 module.exports.getSong = getSong;
 module.exports.getAlbum = getAlbum;
 module.exports.createArtist = createArtist;
 module.exports.updateArtist = updateArtist;
 module.exports.deleteArtist = deleteArtist;
+module.exports.deleteSong = deleteSong;
+module.exports.deleteAlbum = deleteAlbum;

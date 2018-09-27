@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, '../public/')));
 //     .catch(err => console.log(err));
 // });
 
-app.get('/artist', (req, res) => {
+app.get('/artists', (req, res) => {
   requestHandler.getAllArtists();
 });
 
@@ -60,18 +60,6 @@ app.get('/song/:id', function(req, res) {
 });
 
 // POST
-// app.post('/artist', function(req, res) {
-//   let update = {};
-//   var objProp = `albums.${req.body.albumID}.songs.${req.body.songID}.library`;
-//   update[objProp] = !!parseInt(req.body.added, 10);
-
-//   Artists.findOneAndUpdate({ id: req.body.artistID }, { $set: update })
-//     .then(() =>
-//       res.json({ message: 'success', added: !!parseInt(req.body.added, 10) })
-//     )
-//     .catch(() => res.status(400).json({ message: 'bad request' }));
-// });
-
 app.post('/artist', function(req, res) {
   var artist = req.body;
 
@@ -84,21 +72,9 @@ app.put('/artist/:id', function(req, res) {
   var artistId = req.params.id;
   var artist = req.body;
 
-  console.log('Artist', artist);
   requestHandler.updateArtist(artistId, artist);
 
   res.send('artist put request');
-  console.log('PUT REQUEST RECEIVED');
-});
-
-app.put('/album/:id', function(req, res) {
-  res.send('album put request');
-  console.log('PUT REQUEST RECEIVED');
-});
-
-app.put('/song/:id', function(req, res) {
-  res.send('song put request');
-  console.log('PUT REQUEST RECEIVED');
 });
 
 // DELETE
@@ -111,11 +87,17 @@ app.delete('/artist/:id', function(req, res) {
 });
 
 app.delete('/album/:id', function(req, res) {
+  var albumId = req.params.id;
+  requestHandler.deleteAlbum(albumId);
+
   res.send('album delete request');
   console.log('DELETE REQUEST RECEIVED');
 });
 
 app.delete('/song/:id', function(req, res) {
+  var songId = req.params.id;
+  requestHandler.deleteSong(songId);
+
   res.send('song delete request');
   console.log('DELETE REQUEST RECEIVED');
 });
