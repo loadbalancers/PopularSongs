@@ -39,7 +39,8 @@ Update Artist
 /artist/:id
 ```
 ## Delete
-Artist```
+Artist
+```
 /artist/:id
 ```
 Album
