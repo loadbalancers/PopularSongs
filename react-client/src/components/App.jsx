@@ -28,26 +28,29 @@ class App extends React.Component {
       .get(`/artist/` + randNum)
       .then(response => {
         let data = response.data;
+        console.log('DATA', data);
+        console.log('ALBUM IMAGE', data.albums[0].img);
+        console.log('Album One Songs', data.albums[0].songs);
 
         this.setState({ artistObj: data });
-
         this.setState({ albumCovers: data.albums[0].img });
 
-        let albumOne = data.albums[0].songs.map(e => [0, e]);
-        let albumTwo = data.albums[1].songs.map(e => [1, e]);
-        let albumThree = data.albums[2].songs.map(e => [2, e]);
-        let allSongs = albumOne.concat(albumTwo, albumThree);
-
-        allSongs.sort((a, b) => {
-          if (a[1].popularity > b[1].popularity) return -1;
-          if (a[1].popularity < b[1].popularity) return 1;
-          return 0;
-        });
-
-        allSongs = allSongs.slice(0, 10);
-
+        let allSongs = data.albums[0].songs;
         this.setState({ popularSongs: allSongs });
       })
+
+      // let albumOne = data.albums[0].songs.map(e => [0, e]);
+      // let albumTwo = data.albums[1].songs.map(e => [1, e]);
+      // let albumThree = data.albums[2].songs.map(e => [2, e]);
+      // let allSongs = albumOne.concat(albumTwo, albumThree);
+
+      // allSongs.sort((a, b) => {
+      //   if (a[1].popularity > b[1].popularity) return -1;
+      //   if (a[1].popularity < b[1].popularity) return 1;
+      //   return 0;
+      // });
+
+      // allSongs = allSongs.slice(0, 10);
 
       .catch(error => {
         console.log(error);
@@ -89,12 +92,12 @@ class App extends React.Component {
     ];
     return this.state.popularSongs.map((e, i) => (
       <Song
-        key={e[1]._id}
+        key={e.id}
         counter={i + 1}
         albumURL={this.state.albumCovers + albumArr[i] + '.jpg'}
-        library={e[1].library}
-        songName={e[1].name}
-        streams={e[1].streams}
+        library={e.library}
+        songName={e.name}
+        streams={e.streams}
       />
     ));
   }

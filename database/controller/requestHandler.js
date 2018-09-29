@@ -3,20 +3,36 @@ const db = require('../db');
 // Controller Methods
 
 // GET REQUEST
-var getArtist = artistId => {
+var getAllArtists = () => {
   // Query the database and get all the artists
+
   return db.Artist.findAll({
-    where: {
-      id: artistId
-    }
+    limit: 100
   });
 };
 
-var getSong = songId => {
+var getArtist = async artistId => {
+  var artist = await db.Artist.findAll({
+    where: {
+      id: artistId
+    }
+  }).then(data => data[0].dataValues);
+  var albums = await getAlbum(artistId).then(data => data[0].dataValues);
+  var songs = await getSongs(artistId).then(data => data);
+  var albumsList = [];
+
+  albums.songs = songs;
+  albumsList.push(albums);
+  artist.albums = albumsList;
+
+  return artist;
+};
+
+var getSongs = albumId => {
   // Query the database and get all the artists
   return db.Song.findAll({
     where: {
-      id: songId
+      albumId: albumId
     }
   });
 };
@@ -82,7 +98,8 @@ var deleteAlbum = albumId => {
 };
 
 module.exports.getArtist = getArtist;
-module.exports.getSong = getSong;
+module.exports.getAllArtists = getAllArtists;
+module.exports.getSongs = getSongs;
 module.exports.getAlbum = getAlbum;
 module.exports.createArtist = createArtist;
 module.exports.updateArtist = updateArtist;

@@ -1,28 +1,54 @@
 const Faker = require('faker');
 const _ = require('lodash');
 const fs = require('fs');
+const async = require('async');
+const csv = require('csv');
+
+var writeFile = async () => {
+  var artists = generateData();
+
+  var data = await fs.writeFile('artists.csv', artists, err => {
+    if (err) {
+      console.log('Error', err);
+    }
+    console.log('Success!');
+  });
+};
 
 // Create fake data and put into a csv file
-_.times(100000, () => {
-  return Artist.create({
-    name: Faker.name.firstName()
-  }).then(artist => {
-    return artist
-      .createAlbum({
-        name: Faker.commerce.productName(),
-        img: Faker.random.image(),
-        publish: Faker.random.number()
-      })
-      .then(album => {
-        for (var i = 0; i < 10; i++) {
-          album.createSong({
-            name: Faker.commerce.productName(),
-            streams: Faker.random.number(),
-            length: Faker.random.number(),
-            popularity: Faker.random.number(),
-            library: Faker.random.boolean()
-          });
-        }
-      });
+// Use node --max-old-space-size=15000
+var generateData = () => {
+  var artists = 'name \n';
+  _.times(10000000, () => {
+    artists = artists.concat(`${Faker.commerce.productName()} \n`);
   });
-});
+  return artists;
+};
+
+writeFile();
+
+// ALBUMS
+// var writeFile = async () => {
+//   var albums = generateData();
+
+//   var data = await fs.writeFile('albums.csv', albums, err => {
+//     if (err) {
+//       console.log('Error', err);
+//     }
+//     console.log('Success!');
+//   });
+// };
+
+// // Create fake data and put into a csv file
+// var generateData = () => {
+//   var albums = 'name, img, publish, artistId \n';
+//   var count = 1;
+//   _.times(10000000, () => {
+//     albums = albums.concat(
+//       `${Faker.commerce.productName()}, ${Faker.random.image()}, ${Faker.random.number()}, ${count++}  \n`
+//     );
+//   });
+//   return albums;
+// };
+
+// writeFile();

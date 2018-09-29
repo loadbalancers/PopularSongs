@@ -10,8 +10,8 @@ const connection = new Sequelize('spotify', 'root', 'root', {
   pool: {
     max: 5,
     min: 0,
-    acquire: 30000,
-    idle: 10000
+    acquire: 1000000,
+    idle: 1000000
   }
 });
 
@@ -30,11 +30,11 @@ const Album = connection.define('album', {
   },
   img: {
     type: Sequelize.STRING,
-    allowNull: false
+    allowNull: true
   },
   publish: {
     type: Sequelize.INTEGER,
-    allowNull: false
+    allowNull: true
   }
 });
 
@@ -78,12 +78,12 @@ Album.hasMany(Song);
 
 Song.belongsTo(Album);
 
-// connection.sync({ force: true }).then(() => {
-//   _.times(1000, () => {
-//     return Artist.create({
+// var generateFakeDate = () => {
+//   _.times(1, () => {
+//     Artist.create({
 //       name: Faker.name.firstName()
 //     }).then(artist => {
-//       return artist
+//       artist
 //         .createAlbum({
 //           name: Faker.commerce.productName(),
 //           img: Faker.random.image(),
@@ -102,7 +102,13 @@ Song.belongsTo(Album);
 //         });
 //     });
 //   });
-// });
+// };
+
+connection.sync().then(() => {
+  // _.times(1, () => {
+  //   generateFakeDate();
+  // });
+});
 
 module.exports.connection = connection;
 module.exports.Artist = Artist;
