@@ -17,32 +17,48 @@ const models = cassandra.createClient({
   }
 });
 
-const Songs_By_Album = models.loadSchema('songs_by_album', {
+const artist = models.loadSchema('artist', {
   fields: {
-    albumId: 'int',
-    albumName: 'text',
-    albumImage: 'text',
-    songId: 'int',
-    songName: 'text',
-    songUrl: 'text',
-    songStreams: 'int',
-    songLength: 'int',
-    songPopularity: 'smallint',
-    addedToLibrary: 'boolean'
+    name: 'text',
+    id: 'int'
   },
-  key: ['albumId', 'songId']
+  key: ['id']
 });
 
-// Albums By Artist
+artist.syncDB(function(err, result) {
+  if (err) {
+    console.log('Error', err);
+    return;
+  }
+  console.log('Artist Synced!');
+});
+
+const Songs_By_Album = models.loadSchema('songs_by_album', {
+  fields: {
+    album_id: 'int',
+    album_name: 'text',
+    album_image: 'text',
+    song_id: 'int',
+    song_name: 'text',
+    song_url: 'text',
+    song_streams: 'int',
+    song_length: 'int',
+    song_popularity: 'int',
+    added_to_library: 'boolean'
+  },
+  key: ['album_id', 'song_id']
+});
+
+// // Albums By Artist
 const Albums_By_Artist = models.loadSchema('albums_by_artist', {
   fields: {
-    artistId: 'int',
-    artistName: 'text',
-    albumId: 'int',
-    albumName: 'text',
-    albumImage: 'text'
+    artist_id: 'int',
+    artist_name: 'text',
+    album_id: 'int',
+    album_name: 'text',
+    album_image: 'text'
   },
-  key: ['artistId', 'albumId']
+  key: ['artist_id', 'album_id']
 });
 
 // Sync tables
@@ -56,23 +72,52 @@ Albums_By_Artist.syncDB(function(err, result) {
   console.log('Album by artist synced');
 });
 
-var newSong = new models.modelInstance.songs_by_album({
-  albumId: Number(32),
-  albumName: 'SHIHKUNIN',
-  albumImage: 'http://www.blahblah.com',
-  songId: 32,
-  songName: 'Fresh Beat',
-  songUrl: 'http://www.blahblah.com',
-  songStreams: 88877,
-  songLength: 120,
-  songPopularity: 1231,
-  addedToLibrary: true
-});
+// var newSong = new models.modelInstance.songs_by_album({
+//   album_id: Number(32),
+//   album_name: 'SHIHKUNIN',
+//   album_image: 'http://www.blahblah.com',
+//   song_id: 32,
+//   song_name: 'Fresh Beat',
+//   song_url: 'http://www.blahblah.com',
+//   song_streams: 88877,
+//   song_length: 120,
+//   song_popularity: 1231,
+//   added_to_library: true
+// });
 
-newSong.save(err => {
-  if (err) {
-    console.log(err);
-    return;
-  }
-  console.log('SONG SAVED');
-});
+// newSong = new models.modelInstance.songs_by_album({
+//   album_id: Number(32),
+//   album_name: 'SHIHKUNIN',
+//   album_image: 'http://www.blahblah.com',
+//   song_id: 34,
+//   song_name: 'Boomerang',
+//   song_url: 'http://www.blahblah.com',
+//   song_streams: 88877,
+//   song_length: 120,
+//   song_popularity: 1231,
+//   added_to_library: true
+// });
+
+// newSong.save(err => {
+//   if (err) {
+//     console.log(err);
+//     return;
+//   }
+//   console.log('SONG SAVED');
+// });
+
+// var newArtist = new models.modelInstance.albums_by_artist({
+//   artist_id: 10,
+//   artist_name: 'Madeon',
+//   album_id: 20,
+//   album_name: 'Fly Away',
+//   album_image: 'http://www.dfsdfd.com'
+// });
+
+// newArtist.save(err => {
+//   if (err) {
+//     console.log(err);
+//     return;
+//   }
+//   console.log('SONG SAVED');
+// });
