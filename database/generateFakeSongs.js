@@ -8,7 +8,7 @@ const csv = require('csv');
 var writeFile = async () => {
   var songs = generateData();
 
-  var data = await fs.writeFile('songs10.csv', songs, err => {
+  var data = await fs.writeFile('songs30.csv', songs, err => {
     if (err) {
       console.log('Error', err);
     }
@@ -19,7 +19,7 @@ var writeFile = async () => {
 // Create fake data and put into a csv file
 var generateData = () => {
   var songs = 'name, streams, length, popularity, library, albumId \n';
-  var count = 9000001;
+  var count = 29000001;
   _.times(1000000, () => {
     _.times(10, () => {
       songs = songs.concat(

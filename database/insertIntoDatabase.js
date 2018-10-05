@@ -3,7 +3,7 @@ const async = require('async');
 const csv = require('csv');
 const db = require('./db');
 
-var input = fs.createReadStream('./songs10.csv');
+var input = fs.createReadStream('./songs30.csv');
 var parser = csv.parse({
   columns: true,
   relax: true,

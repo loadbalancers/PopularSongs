@@ -29,13 +29,12 @@ class App extends React.Component {
       .then(response => {
         let data = response.data;
         console.log('DATA', data);
-        console.log('ALBUM IMAGE', data.albums[0].img);
-        console.log('Album One Songs', data.albums[0].songs);
 
         this.setState({ artistObj: data });
         this.setState({ albumCovers: data.albums[0].img });
 
-        let allSongs = data.albums[0].songs;
+        let allSongs = data.albums[0][0].songs;
+        console.log('All Songs', allSongs);
         this.setState({ popularSongs: allSongs });
       })
 
@@ -94,7 +93,7 @@ class App extends React.Component {
       <Song
         key={e.id}
         counter={i + 1}
-        albumURL={this.state.albumCovers + albumArr[i] + '.jpg'}
+        albumURL={this.state.albumCovers}
         library={e.library}
         songName={e.name}
         streams={e.streams}

@@ -38,6 +38,7 @@ const Songs_By_Album = models.loadSchema('songs_by_album', {
     album_id: 'int',
     album_name: 'text',
     album_image: 'text',
+    album_publish: 'int',
     song_id: 'int',
     song_name: 'text',
     song_url: 'text',
@@ -56,7 +57,8 @@ const Albums_By_Artist = models.loadSchema('albums_by_artist', {
     artist_name: 'text',
     album_id: 'int',
     album_name: 'text',
-    album_image: 'text'
+    album_image: 'text',
+    album_publish: 'int'
   },
   key: ['artist_id', 'album_id']
 });
@@ -66,6 +68,7 @@ Songs_By_Album.syncDB(function(err, result) {
   if (err) throw err;
   console.log('Songs by album synced');
 });
+``;
 
 Albums_By_Artist.syncDB(function(err, result) {
   if (err) throw err;

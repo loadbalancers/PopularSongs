@@ -1,11 +1,8 @@
 const db = require('../db');
 
 // Controller Methods
-
 // GET REQUEST
 var getAllArtists = () => {
-  // Query the database and get all the artists
-
   return db.Artist.findAll({
     limit: 100
   });
@@ -17,11 +14,24 @@ var getArtist = async artistId => {
       id: artistId
     }
   }).then(data => data[0].dataValues);
-  var albums = await getAlbum(artistId).then(data => data[0].dataValues);
+
+  var albums = await getAlbum(artistId).then(data => {
+    // Loop through the data array and for each album
+    // Get the songs for that particular album based on the id
+    // Append the songs to the album
+    data.forEach(async album => {
+      var albumID = album.dataValues.id;
+      var songs = await getSongs(albumID).then(song => {
+        return song;
+      });
+      album.dataValues.songs = songs;
+    });
+
+    return data;
+  });
   var songs = await getSongs(artistId).then(data => data);
   var albumsList = [];
 
-  albums.songs = songs;
   albumsList.push(albums);
   artist.albums = albumsList;
 
@@ -37,11 +47,11 @@ var getSongs = albumId => {
   });
 };
 
-var getAlbum = albumId => {
+var getAlbum = artistId => {
   // Query the database and get all the artists
   return db.Album.findAll({
     where: {
-      id: albumId
+      artistId: artistId
     }
   });
 };

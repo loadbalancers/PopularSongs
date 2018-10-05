@@ -7,6 +7,8 @@ const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
 const Artist = require('../database/index');
 const connection = require('../database/db');
+const axios = require('axios');
+require('newrelic');
 
 // Clustering
 if (cluster.isMaster) {
@@ -30,11 +32,10 @@ if (cluster.isMaster) {
 
   app.get('/artist/:id', function(req, res) {
     let artistID = parseInt(req.params.id, 10);
-    // Artist.findOne({ id: artistID })
-    //   .then(artist => res.json(artist))
-    //   .catch(err => console.log(err));
 
-    requestHandler.getArtist(artistID).then(data => res.send(data));
+    requestHandler.getArtist(artistID).then(data => {
+      res.send(data);
+    });
   });
 
   app.get('/artists', (req, res) => {
