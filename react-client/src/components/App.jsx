@@ -29,9 +29,10 @@ class App extends React.Component {
       .then(response => {
         let data = response.data;
         console.log('DATA', data);
+        console.log('AlbumId', data.albums[0][0].img);
 
         this.setState({ artistObj: data });
-        this.setState({ albumCovers: data.albums[0].img });
+        this.setState({ albumCovers: data.albums[0][0].img });
 
         let allSongs = data.albums[0][0].songs;
         console.log('All Songs', allSongs);
