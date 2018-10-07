@@ -10,113 +10,113 @@ const numCPUs = require('os').cpus().length;
 const connection = require('../database/db');
 
 // Clustering
-if (cluster.isMaster) {
-  console.log(`Master ${process.pid} is running`);
+// if (cluster.isMaster) {
+//   console.log(`Master ${process.pid} is running`);
 
-  // Fork Workers
-  for (let i = 0; i < numCPUs; i++) {
-    cluster.fork();
-  }
+//   // Fork Workers
+//   for (let i = 0; i < numCPUs; i++) {
+//     cluster.fork();
+//   }
 
-  cluster.on('exit', (worker, code, signal) => {
-    console.log(`worker ${worker.process.pid} died`);
+//   cluster.on('exit', (worker, code, signal) => {
+//     console.log(`worker ${worker.process.pid} died`);
+//   });
+// } else {
+const app = express();
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+app.use(cors());
+app.use(express.static(path.join(__dirname, '../public/')));
+
+app.get('/artist/:id', cache.route(), function(req, res) {
+  let artistID = parseInt(req.params.id, 10);
+
+  requestHandler.getArtist(artistID).then(data => {
+    res.send(data);
   });
-} else {
-  const app = express();
+});
 
-  app.use(bodyParser.urlencoded({ extended: false }));
-  app.use(bodyParser.json());
-  app.use(cors());
-  app.use(express.static(path.join(__dirname, '../public/')));
+app.get('/artists', (req, res) => {
+  requestHandler.getAllArtists().then(data => res.send(data));
+});
 
-  app.get('/artist/:id', cache.route(), function(req, res) {
-    let artistID = parseInt(req.params.id, 10);
+// GET
+app.get('/artist/:id', function(req, res) {
+  var artistId = req.params.id;
+  var artist = requestHandler.getArtist(artistId);
 
-    requestHandler.getArtist(artistID).then(data => {
-      res.send(data);
-    });
+  artist.then(artist => {
+    res.send(artist[0].dataValues);
   });
+});
 
-  app.get('/artists', (req, res) => {
-    requestHandler.getAllArtists().then(data => res.send(data));
+app.get('/album/:id', function(req, res) {
+  var albumId = req.params.id;
+  var album = requestHandler.getAlbum(albumId);
+
+  album.then(album => {
+    res.send(album[0].dataValues);
   });
+});
 
-  // GET
-  app.get('/artist/:id', function(req, res) {
-    var artistId = req.params.id;
-    var artist = requestHandler.getArtist(artistId);
+app.get('/song/:id', function(req, res) {
+  var songId = req.params.id;
+  var song = requestHandler.getSong(songId);
 
-    artist.then(artist => {
-      res.send(artist[0].dataValues);
-    });
+  song.then(song => {
+    res.send(song[0].dataValues);
   });
+});
 
-  app.get('/album/:id', function(req, res) {
-    var albumId = req.params.id;
-    var album = requestHandler.getAlbum(albumId);
+// POST
+app.post('/artist', function(req, res) {
+  var artist = req.body;
 
-    album.then(album => {
-      res.send(album[0].dataValues);
-    });
-  });
+  requestHandler.createArtist(artist);
+  res.send('created');
+});
 
-  app.get('/song/:id', function(req, res) {
-    var songId = req.params.id;
-    var song = requestHandler.getSong(songId);
+// UPDATE
+app.put('/artist/:id', function(req, res) {
+  var artistId = req.params.id;
+  var artist = req.body;
 
-    song.then(song => {
-      res.send(song[0].dataValues);
-    });
-  });
+  requestHandler.updateArtist(artistId, artist);
 
-  // POST
-  app.post('/artist', function(req, res) {
-    var artist = req.body;
+  res.send('artist put request');
+});
 
-    requestHandler.createArtist(artist);
-    res.send('created');
-  });
+// DELETE
+app.delete('/artist/:id', function(req, res) {
+  var artistId = req.params.id;
+  requestHandler.deleteArtist(artistId);
 
-  // UPDATE
-  app.put('/artist/:id', function(req, res) {
-    var artistId = req.params.id;
-    var artist = req.body;
+  res.send('artist delete request');
+  console.log('DELETE REQUEST RECEIVED');
+});
 
-    requestHandler.updateArtist(artistId, artist);
+app.delete('/album/:id', function(req, res) {
+  var albumId = req.params.id;
+  requestHandler.deleteAlbum(albumId);
 
-    res.send('artist put request');
-  });
+  res.send('album delete request');
+  console.log('DELETE REQUEST RECEIVED');
+});
 
-  // DELETE
-  app.delete('/artist/:id', function(req, res) {
-    var artistId = req.params.id;
-    requestHandler.deleteArtist(artistId);
+app.delete('/song/:id', function(req, res) {
+  var songId = req.params.id;
+  requestHandler.deleteSong(songId);
 
-    res.send('artist delete request');
-    console.log('DELETE REQUEST RECEIVED');
-  });
+  res.send('song delete request');
+  console.log('DELETE REQUEST RECEIVED');
+});
 
-  app.delete('/album/:id', function(req, res) {
-    var albumId = req.params.id;
-    requestHandler.deleteAlbum(albumId);
+const PORT = 3003;
 
-    res.send('album delete request');
-    console.log('DELETE REQUEST RECEIVED');
-  });
+app.listen(PORT, function() {
+  console.log(`listening on port ${PORT}!`);
+});
 
-  app.delete('/song/:id', function(req, res) {
-    var songId = req.params.id;
-    requestHandler.deleteSong(songId);
-
-    res.send('song delete request');
-    console.log('DELETE REQUEST RECEIVED');
-  });
-
-  const PORT = 3003;
-
-  app.listen(PORT, function() {
-    console.log(`listening on port ${PORT}!`);
-  });
-
-  console.log(`Worker ${process.pid} started`);
-}
+// console.log(`Worker ${process.pid} started`);
+// }
