@@ -1,14 +1,13 @@
+require('newrelic');
 const express = require('express');
+const cache = require('express-redis-cache')();
 const bodyParser = require('body-parser');
 const path = require('path');
 const cors = require('cors');
 const requestHandler = require('../database/controller/requestHandler');
 const cluster = require('cluster');
 const numCPUs = require('os').cpus().length;
-const Artist = require('../database/index');
 const connection = require('../database/db');
-const axios = require('axios');
-require('newrelic');
 
 // Clustering
 if (cluster.isMaster) {
@@ -30,7 +29,7 @@ if (cluster.isMaster) {
   app.use(cors());
   app.use(express.static(path.join(__dirname, '../public/')));
 
-  app.get('/artist/:id', function(req, res) {
+  app.get('/artist/:id', cache.route(), function(req, res) {
     let artistID = parseInt(req.params.id, 10);
 
     requestHandler.getArtist(artistID).then(data => {

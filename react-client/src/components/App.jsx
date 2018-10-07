@@ -29,14 +29,28 @@ class App extends React.Component {
       .then(response => {
         let data = response.data;
         console.log('DATA', data);
-        console.log('AlbumId', data.albums[0][0].img);
+        console.log('Albums', data.albums[0]);
 
         this.setState({ artistObj: data });
-        this.setState({ albumCovers: data.albums[0][0].img });
+        this.setState({ albumCovers: data.albums[0] });
 
-        let allSongs = data.albums[0][0].songs;
-        console.log('All Songs', allSongs);
-        this.setState({ popularSongs: allSongs });
+        let albumOne = data.albums[0][0].songs;
+        let albumTwo = data.albums[0][1].songs;
+        let albumThree = data.albums[0][2].songs;
+
+        albumOne.splice(4);
+        albumTwo.splice(3);
+        albumThree.splice(3);
+
+        let allAlbumSongs = albumOne.concat(albumTwo, albumThree);
+
+        allAlbumSongs.sort((a, b) => {
+          if (a.popularity > b.popularity) return -1;
+          if (a.popularity < b.popularity) return 1;
+          return 0;
+        });
+
+        this.setState({ popularSongs: allAlbumSongs });
       })
 
       // let albumOne = data.albums[0].songs.map(e => [0, e]);
@@ -50,56 +64,36 @@ class App extends React.Component {
       //   return 0;
       // });
 
-      // allSongs = allSongs.slice(0, 10);
-
       .catch(error => {
         console.log(error);
       });
   }
 
   createListOfSongs() {
-    let albumArr = [
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6,
-      7,
-      8,
-      9,
-      10
-    ];
-    return this.state.popularSongs.map((e, i) => (
-      <Song
-        key={e.id}
-        counter={i + 1}
-        albumURL={this.state.albumCovers}
-        library={e.library}
-        songName={e.name}
-        streams={e.streams}
-      />
-    ));
+    console.log('ALBUM COVERS???', this.state.albumCovers);
+
+    return this.state.popularSongs.map((song, i) => {
+      var albumCovers = this.state.albumCovers;
+      var songAlbum;
+
+      albumCovers.forEach(album => {
+        console.log('LOOOOP ALBUM', album);
+        if (song.albumId === album.id) {
+          songAlbum = album;
+        }
+      });
+
+      return (
+        <Song
+          key={song.id}
+          counter={i + 1}
+          albumURL={songAlbum.img}
+          library={song.library}
+          songName={song.name}
+          streams={song.streams}
+        />
+      );
+    });
   }
 
   fiveBestSongs() {

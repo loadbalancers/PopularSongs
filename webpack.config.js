@@ -1,5 +1,4 @@
 var path = require('path');
-//var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var webpack = require('webpack');
 var SRC_DIR = path.join(__dirname, '/react-client/src');
 var DIST_DIR = path.join(__dirname, '/public/dist');
@@ -10,7 +9,6 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: DIST_DIR //,
-    //publicPath: '/react-client/dist'
   },
   module: {
     rules: [
@@ -27,10 +25,16 @@ module.exports = {
           }
         }
       },
-      /*{
-          test: /\.css$/,
-          use: ['style-loader', 'css-loader']
-        },*/
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: ['babel-preset-env', 'babel-preset-react']
+          }
+        }
+      },
       {
         test: /\.css$/,
         use: 'style-loader'

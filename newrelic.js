@@ -13,6 +13,7 @@ exports.config = {
   /**
    * Your New Relic license key.
    */
+  // Don't push
   license_key: 'bce40fe38059b05febee269fa8bd03da730e733e',
   logging: {
     /**
