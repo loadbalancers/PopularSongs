@@ -19,7 +19,7 @@ var writeFile = async () => {
 // Create fake data and put into a csv file
 var generateData = () => {
   var songs = 'name, streams, length, popularity, library, albumId \n';
-  var count = 29000001;
+  var count = 29000000;
   _.times(1000000, () => {
     _.times(10, () => {
       songs = songs.concat(

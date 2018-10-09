@@ -2,7 +2,7 @@ const Faker = require('faker');
 const _ = require('lodash');
 const Sequelize = require('sequelize');
 
-const connection = new Sequelize('spotify', 'root', 'root', {
+const connection = new Sequelize('spotify', 'root', 'muzBost&i3^meoW7bowWow', {
   host: 'localhost',
   dialect: 'mysql',
   operatorsAliases: false,

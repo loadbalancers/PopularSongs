@@ -42,7 +42,7 @@ var writeFile = async () => {
 // Create fake data and put into a csv file
 var generateData = () => {
   var albums = 'name, img, publish, artistId \n';
-  var count = 9000001;
+  var count = 9000000;
   _.times(1000000, () => {
     _.times(3, () => {
       var randomNumber = Math.floor(Math.random() * (1000 - 0) + 0);
