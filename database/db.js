@@ -2,11 +2,13 @@ const Faker = require('faker');
 const _ = require('lodash');
 const Sequelize = require('sequelize');
 
-const connection = new Sequelize('spotify', 'root', 'muzBost&i3^meoW7bowWow', {
-  host: 'localhost',
+const connection = new Sequelize({
+  username: 'root',
+  password: 'muzBost&i3^meoW7bowWow',
+  database: 'spotify',
+  host: '13.57.48.179',
   dialect: 'mysql',
   operatorsAliases: false,
-
   pool: {
     max: 5,
     min: 0,
@@ -61,14 +63,14 @@ const Song = connection.define('song', {
   }
 });
 
-connection
-  .authenticate()
-  .then(() => {
-    console.log('Connection established correctly');
-  })
-  .catch(err => {
-    console.log('Unable to connect!!!', err);
-  });
+// connection
+//   .authenticate()
+//   .then(() => {
+//     console.log('Connection established correctly');
+//   })
+//   .catch(err => {
+//     console.log('Unable to connect!!!', err);
+//   });
 
 // Relationships
 Artist.hasMany(Album);
@@ -104,11 +106,9 @@ Song.belongsTo(Album);
 //   });
 // };
 
-connection.sync().then(() => {
-  // _.times(1, () => {
-  //   generateFakeDate();
-  // });
-});
+Artist.sync().then(() => {});
+Song.sync().then(() => {});
+Album.sync().then(() => {});
 
 module.exports.connection = connection;
 module.exports.Artist = Artist;
