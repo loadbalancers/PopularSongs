@@ -6,7 +6,7 @@ const connection = new Sequelize({
   username: 'root',
   password: 'muzBost&i3^meoW7bowWow',
   database: 'spotify',
-  host: '54.67.71.21',
+  host: '13.57.220.2',
   dialect: 'mysql',
   operatorsAliases: false,
   pool: {
